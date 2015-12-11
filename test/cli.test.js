@@ -1,23 +1,27 @@
-/* jshint expr: true */
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var rewire = require('rewire');
-var cli = rewire('../lib/cli');
-var testConfig = require('./fixtures/test-config.json');
-var singleTestConfig = require('./fixtures/single-test-config.json');
+/* eslint no-unused-expressions: 0 */
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import cli from '../lib/cli';
+import * as helpers from '../lib/helpers';
+import testConfig from './fixtures/test-config.json';
+import singleTestConfig from './fixtures/single-test-config.json';
 
 chai.should();
 chai.use(sinonChai);
 
 describe('CLI', function() {
-  before(function() {
-    this.createBotsStub = sinon.stub();
-    cli.__set__('createBots', this.createBotsStub);
+  const sandbox = sinon.sandbox.create({
+    useFakeTimers: false,
+    useFakeServer: false
+  });
+
+  beforeEach(function() {
+    this.createBotsStub = sandbox.stub(helpers, 'createBots');
   });
 
   afterEach(function() {
-    this.createBotsStub.reset();
+    sandbox.restore();
   });
 
   it('should be possible to give the config as an env var', function() {
@@ -29,8 +33,13 @@ describe('CLI', function() {
 
   it('should be possible to give the config as an option', function() {
     delete process.env.CONFIG_FILE;
-    process.argv = ['node', 'index.js',
-      '--config', process.cwd() + '/test/fixtures/single-test-config.json'];
+    process.argv = [
+      'node',
+      'index.js',
+      '--config',
+      `${process.cwd()}/test/fixtures/single-test-config.json`
+    ];
+
     cli();
     this.createBotsStub.should.have.been.calledWith(singleTestConfig);
   });

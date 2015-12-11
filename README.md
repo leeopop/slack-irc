@@ -15,9 +15,10 @@ $ slack-irc --config /path/to/config.json
 or by cloning the repository:
 
 ```bash
-In the repository folder:
+$ git clone https://github.com/ekmartin/slack-irc.git && cd slack-irc
 $ npm install
-$ node index.js --config /path/to/config.json
+$ npm run build
+$ npm start -- --config /path/to/config.json # Note the extra -- here
 ```
 
 It can also be used as a node module:
@@ -48,6 +49,7 @@ slack-irc also supports invite-only IRC channels, and will join any channels it'
 as long as they're present in the channel mapping.
 
 ### Example configuration
+Valid JSON cannot contain comments, so remember to remove them first!
 ```js
 [
   // Bot 1 (minimal configuration):
@@ -87,11 +89,30 @@ as long as they're present in the channel mapping.
 
 `ircOptions` is passed directly to node-irc ([available options](http://node-irc.readthedocs.org/en/latest/API.html#irc.Client)).
 
-## Tests
+## Development
+To be able to use the latest ES2015+ features, slack-irc uses [Babel](https://babeljs.io).
+
+Build the source with:
+```bash
+$ npm run build
+```
+
+### Tests
 Run the tests with:
 ```bash
-$ make test
+$ npm test
 ```
+
+### Style Guide
+slack-irc uses a slightly modified version of the
+[Airbnb Style Guide](https://github.com/airbnb/javascript/tree/master/es5).
+[ESLint](http://eslint.org/) is used to make sure this is followed correctly, which can be run with:
+
+```bash
+$ npm run lint
+```
+
+The deviations from the Airbnb Style Guide can be seen in  the [.eslintrc](.eslintrc) file.
 
 ## Docker
 A third-party Docker container can be found [here](https://github.com/caktux/slackbridge/).
@@ -100,7 +121,7 @@ A third-party Docker container can be found [here](https://github.com/caktux/sla
 
 (The MIT License)
 
-Copyright (c) 2015 Martin Ek <mail@ekmartin.no>
+Copyright (c) 2015 Martin Ek <mail@ekmartin.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
